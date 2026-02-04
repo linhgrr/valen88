@@ -9,6 +9,7 @@ import MainScreen from "../../../components/MainScreen";
 import OpenedEnvelopeScreen from "../../../components/OpenedEnvelopeScreen";
 import CollageScreen from "../../../components/CollageScreen";
 import DesktopWarning from "../../../components/DesktopWarning";
+import { preloadAllAssets } from "../../../utils/preloadAssets";
 
 interface CardData {
   name1: string;
@@ -18,6 +19,7 @@ interface CardData {
 }
 
 const MOBILE_MAX_WIDTH = 480;
+const MIN_LOADING_TIME = 2000;
 
 export default function CardPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -27,6 +29,7 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
   const [isClient, setIsClient] = useState(false);
   const [cardData, setCardData] = useState<CardData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
 
   // Check if screen is mobile size
   useEffect(() => {
@@ -62,14 +65,29 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
     fetchCard();
   }, [slug]);
 
+  // Preload all assets (static + card images) when card data is available
   useEffect(() => {
     if (!isMobile || !cardData) return;
+
+    const startTime = Date.now();
     
-    const timer = setTimeout(() => {
-      setScreenState('closed');
-    }, 2000);
-    return () => clearTimeout(timer);
+    // Preload static assets + card images from API
+    preloadAllAssets(cardData.images).then(() => {
+      const elapsed = Date.now() - startTime;
+      const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsed);
+      
+      setTimeout(() => {
+        setAssetsLoaded(true);
+      }, remainingTime);
+    });
   }, [isMobile, cardData]);
+
+  // Transition to main screen when assets are loaded
+  useEffect(() => {
+    if (assetsLoaded && screenState === 'loading') {
+      setScreenState('closed');
+    }
+  }, [assetsLoaded, screenState]);
 
   const handleOpenEnvelope = () => {
     setScreenState('opened');

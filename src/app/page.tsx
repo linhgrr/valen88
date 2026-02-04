@@ -10,8 +10,10 @@ import MainScreen from "../components/MainScreen";
 import OpenedEnvelopeScreen from "../components/OpenedEnvelopeScreen";
 import CollageScreen from "../components/CollageScreen";
 import DesktopWarning from "../components/DesktopWarning";
+import { preloadStaticAssets } from "../utils/preloadAssets";
 
 const MOBILE_MAX_WIDTH = 480;
+const MIN_LOADING_TIME = 2000; // Minimum loading time in ms
 
 function PageContent() {
   const searchParams = useSearchParams();
@@ -19,6 +21,7 @@ function PageContent() {
   const [isHeartTransition, setIsHeartTransition] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
   const [isClient, setIsClient] = useState(false);
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
 
   // Get names from query params
   const name1 = searchParams.get('name1') || 'Tuan';
@@ -38,14 +41,29 @@ function PageContent() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Preload all assets during loading screen
   useEffect(() => {
     if (!isMobile) return;
+
+    const startTime = Date.now();
     
-    const timer = setTimeout(() => {
-      setScreenState('closed');
-    }, 2000); // Transition after 2 seconds
-    return () => clearTimeout(timer);
+    preloadStaticAssets().then(() => {
+      const elapsed = Date.now() - startTime;
+      const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsed);
+      
+      // Ensure minimum loading time for smooth UX
+      setTimeout(() => {
+        setAssetsLoaded(true);
+      }, remainingTime);
+    });
   }, [isMobile]);
+
+  // Transition to main screen when assets are loaded
+  useEffect(() => {
+    if (assetsLoaded && screenState === 'loading') {
+      setScreenState('closed');
+    }
+  }, [assetsLoaded, screenState]);
 
   const handleOpenEnvelope = () => {
     setScreenState('opened');
