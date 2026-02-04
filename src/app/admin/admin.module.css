@@ -18,12 +18,38 @@
   box-shadow: 0 20px 60px rgba(137, 16, 8, 0.15);
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .title {
-  text-align: center;
   color: #891008;
   font-size: 32px;
-  margin-bottom: 24px;
   font-weight: 700;
+  margin: 0;
+}
+
+.viewAllBtn {
+  padding: 10px 20px;
+  background: #891008;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: 'Dancing Script', cursive;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.viewAllBtn:hover {
+  background: #6d0c06;
+  transform: translateY(-2px);
 }
 
 .error {

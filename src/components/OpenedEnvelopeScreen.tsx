@@ -77,8 +77,8 @@ export default function OpenedEnvelopeScreen({
                 {allEnvelopeLoaded && (
                     <motion.div
                         className={styles.letterCard}
-                        initial={{ y: 30, opacity: 0 }}
-                        animate={{ y: isLetterRevealed ? -100 : 30, opacity: 1 }}
+                        initial={{ y: 40, opacity: 0 }}
+                        animate={{ y: isLetterRevealed ? -120 : 15, opacity: 1 }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
                     >
                         <p className={styles.letterDate}>14/02/2026</p>

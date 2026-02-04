@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import QRCode from "qrcode";
 import styles from "./admin.module.css";
 
@@ -216,7 +217,12 @@ export default function AdminPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <h1 className={styles.title}>💕 Tạo Thiệp Valentine</h1>
+        <div className={styles.header}>
+          <h1 className={styles.title}>💕 Tạo Thiệp Valentine</h1>
+          <Link href="/admin/cards" className={styles.viewAllBtn}>
+            📋 Xem tất cả thiệp
+          </Link>
+        </div>
 
         {error && <div className={styles.error}>{error}</div>}
 
