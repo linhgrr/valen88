@@ -1,0 +1,86 @@
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: linear-gradient(135deg, #ffe3e6 0%, #ffb6c1 50%, #ff9aa2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.loveTextPattern {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  opacity: 0.08;
+  pointer-events: none;
+  font-family: "Dancing Script", cursive;
+}
+
+.textContent {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  font-size: 32px;
+  color: #891008;
+  line-height: 1.8;
+  word-spacing: 20px;
+  letter-spacing: 2px;
+  white-space: pre-wrap;
+  transform: rotate(-5deg);
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 60px 40px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(137, 16, 8, 0.15);
+  max-width: 500px;
+  backdrop-filter: blur(10px);
+}
+
+.phoneIcon {
+  font-size: 80px;
+  margin-bottom: 10px;
+}
+
+.heartIcon {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-family: "Dancing Script", cursive;
+  font-size: 36px;
+  color: #891008;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-family: "Dancing Script", cursive;
+  font-size: 20px;
+  color: #b5495b;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.instructions {
+  font-family: "Dancing Script", cursive;
+  font-size: 18px;
+  color: #666;
+  line-height: 2;
+}
+
+.instructions p {
+  margin: 8px 0;
+}
