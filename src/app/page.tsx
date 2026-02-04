@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -13,7 +13,7 @@ import DesktopWarning from "../components/DesktopWarning";
 
 const MOBILE_MAX_WIDTH = 480;
 
-export default function Page() {
+function PageContent() {
   const searchParams = useSearchParams();
   const [screenState, setScreenState] = useState<'loading' | 'closed' | 'opened' | 'collage'>('loading');
   const [isHeartTransition, setIsHeartTransition] = useState(false);
@@ -125,5 +125,13 @@ export default function Page() {
         </motion.div>
       )}
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <PageContent />
+    </Suspense>
   );
 }
