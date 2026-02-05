@@ -3,42 +3,24 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import styles from "../app/page.module.css";
-import { generateLoveTextPattern } from "../utils/patterns";
+import FallingHearts from "./FallingHearts";
 
 export default function LoadingScreen() {
-    const loveTextContent = generateLoveTextPattern();
-
     return (
         <div className={styles.contentWrapper}>
-            {/* Background pattern with love words */}
-            <div className="love-text-pattern">
-                <div className="text-content">{loveTextContent}</div>
+            {/* Background Texture from Design */}
+            <div className={styles.backTexture}>
+                <Image
+                    src="/back-texture.png"
+                    alt=""
+                    fill
+                    style={{ objectFit: 'cover', opacity: 0.12 }}
+                    priority
+                />
             </div>
 
-            {/* Floating hearts decoration */}
-            <div className={styles.floatingHearts}>
-                {[...Array(12)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className={styles.miniHeart}
-                        style={{
-                            left: `${10 + ((i * 7) % 80)}%`,
-                            top: `${5 + ((i * 13) % 85)}%`,
-                        }}
-                        animate={{
-                            scale: [1, 1.2, 1],
-                            opacity: [0.3, 0.6, 0.3],
-                        }}
-                        transition={{
-                            duration: 2 + (i % 3),
-                            repeat: Infinity,
-                            delay: i * 0.2,
-                        }}
-                    >
-                        ♡
-                    </motion.div>
-                ))}
-            </div>
+            {/* Slow Falling Hearts */}
+            <FallingHearts />
 
             {/* Center content */}
             <div className={styles.centerContent}>

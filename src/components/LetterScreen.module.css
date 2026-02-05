@@ -47,7 +47,7 @@
     align-items: center;
     justify-content: center;
     color: #c15a50;
-    font-family: 'Unna', serif;
+    font-family: 'Playwrite AU NSW', cursive;
     font-size: 18px;
     background: #f0f0f0;
     z-index: -1;
@@ -156,35 +156,35 @@
     .photoFrameOne {
         width: 42%;
     }
-    
+
     .photoFrameTwo {
         width: 42%;
     }
-    
+
     .photoFrameThree {
         width: 46%;
     }
-    
+
     .starSticker {
         width: 85px;
     }
-    
+
     .flowerSticker {
         width: 55px;
     }
-    
+
     .clamSticker {
         width: 75px;
     }
-    
+
     .signSticker {
         width: 75px;
     }
-    
+
     .messageGreeting {
         font-size: 18px;
     }
-    
+
     .messageContent {
         font-size: 12px;
     }
@@ -195,11 +195,11 @@
     .messageSection {
         top: 55%;
     }
-    
+
     .messageGreeting {
         font-size: 22px;
     }
-    
+
     .messageContent {
         font-size: 15px;
     }

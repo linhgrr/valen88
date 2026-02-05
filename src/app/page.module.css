@@ -123,8 +123,9 @@
 }
 
 .valentineTitle {
-  font-family: 'Dancing Script', cursive;
-  font-size: 48px;
+  font-family: var(--font-sloop), 'Pinyon Script', cursive;
+  font-size: 64px;
+  /* Font size increased for elegant script appearance */
   font-weight: 400;
   margin: 0;
 }
@@ -278,7 +279,7 @@
   left: 8%;
   width: 45%;
   height: auto;
-  transform: rotate(-15deg); 
+  transform: rotate(-15deg);
   z-index: 2;
 }
 
@@ -490,8 +491,8 @@
 
 /* Loading text - Mobile First */
 .loadingText {
-  font-family: "Dancing Script", cursive;
-  font-size: 32px;
+  font-family: "Kapakana", "Dancing Script", cursive;
+  font-size: 45px;
   /* Mobile: smaller text */
   font-weight: 500;
   color: #891008;
@@ -507,7 +508,7 @@
 
 .dots span {
   display: inline-block;
-  width: 10px;
+  width: 14px;
 }
 
 /* =============================================
@@ -524,11 +525,11 @@
   }
 
   .loadingText {
-    font-size: 40px;
+    font-size: 52px;
   }
 
   .dots span {
-    width: 12px;
+    width: 16px;
   }
 }
 
@@ -546,11 +547,11 @@
   }
 
   .loadingText {
-    font-size: 48px;
+    font-size: 64px;
   }
 
   .dots span {
-    width: 14px;
+    width: 18px;
   }
 }
 
@@ -564,6 +565,6 @@
   }
 
   .loadingText {
-    font-size: 56px;
+    font-size: 72px;
   }
 }
