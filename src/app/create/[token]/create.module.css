@@ -319,6 +319,49 @@
     margin-bottom: 24px;
 }
 
+/* Message Section */
+.messageSection {
+    margin-bottom: 24px;
+}
+
+.messageSection h2 {
+    text-align: center;
+    color: #891008;
+    font-size: 18px;
+    margin-bottom: 16px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.messageField {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.messageField label {
+    color: #891008;
+    font-size: 14px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.messageField input,
+.messageField textarea {
+    padding: 14px;
+    border: 2px solid #ffb6c1;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.messageField input:focus,
+.messageField textarea:focus {
+    outline: none;
+    border-color: #891008;
+}
+
 .previewToggle {
     display: flex;
     align-items: center;

@@ -7,7 +7,9 @@ export async function POST(request: NextRequest) {
     await dbConnect();
 
     const body = await request.json();
-    const { name1, name2, images } = body;
+    const { name1, name2, images, letterImages, letterMessage } = body;
+
+    console.log('API received:', { letterImages, letterMessage });
 
     if (!name1 || !name2) {
       return NextResponse.json({ error: 'Both names are required' }, { status: 400 });
@@ -17,13 +19,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Exactly 6 images are required' }, { status: 400 });
     }
 
-    const card = new Card({
+    const cardData = {
       name1,
       name2,
       images,
+      letterImages: letterImages || [],
+      letterMessage: {
+        greeting: letterMessage?.greeting || 'Dear em iu ,',
+        content: letterMessage?.content || ''
+      }
+    };
+
+    console.log('Creating card with data:', cardData);
+
+    const card = new Card(cardData);
+
+    console.log('Card before save:', {
+      letterImages: card.letterImages,
+      letterMessage: card.letterMessage
     });
 
     await card.save();
+
+    console.log('Card after save:', {
+      letterImages: card.letterImages,
+      letterMessage: card.letterMessage
+    });
 
     return NextResponse.json({
       success: true,
@@ -33,6 +54,8 @@ export async function POST(request: NextRequest) {
         name1: card.name1,
         name2: card.name2,
         images: card.images,
+        letterImages: card.letterImages,
+        letterMessage: card.letterMessage,
       },
     });
   } catch (error) {

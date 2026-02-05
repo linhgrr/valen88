@@ -24,6 +24,8 @@ export async function GET(
         name1: card.name1,
         name2: card.name2,
         images: card.images,
+        letterImages: card.letterImages || [],
+        letterMessage: card.letterMessage || { greeting: 'Dear em iu ,', content: '' },
         createdAt: card.createdAt,
       },
     });

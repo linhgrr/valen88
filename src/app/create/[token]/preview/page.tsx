@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { FiCamera } from "react-icons/fi";
 import collageStyles from "../../../page.module.css";
+import LetterScreen from "../../../../components/LetterScreen";
 import { generateLoveTextPattern } from "../../../../utils/patterns";
 
 export default function PreviewPage({ params }: { params: Promise<{ token: string }> }) {
@@ -12,7 +13,10 @@ export default function PreviewPage({ params }: { params: Promise<{ token: strin
     const [name1, setName1] = useState("");
     const [name2, setName2] = useState("");
     const [images, setImages] = useState<string[]>([]);
+    const [letterImages, setLetterImages] = useState<string[]>([]);
+    const [letterMessage, setLetterMessage] = useState({ greeting: "Dear em iu ,", content: "" });
     const [isLoaded, setIsLoaded] = useState(false);
+    const [currentScreen, setCurrentScreen] = useState<'collage' | 'letter'>('collage');
 
     useEffect(() => {
         // Get data from localStorage (set by parent window)
@@ -22,6 +26,8 @@ export default function PreviewPage({ params }: { params: Promise<{ token: strin
             setName1(data.name1 || "");
             setName2(data.name2 || "");
             setImages(data.images || []);
+            setLetterImages(data.letterImages || []);
+            setLetterMessage(data.letterMessage || { greeting: "Dear em iu ,", content: "" });
         }
         setIsLoaded(true);
 
@@ -31,6 +37,8 @@ export default function PreviewPage({ params }: { params: Promise<{ token: strin
                 setName1(e.data.name1);
                 setName2(e.data.name2);
                 setImages(e.data.images);
+                setLetterImages(e.data.letterImages || []);
+                setLetterMessage(e.data.letterMessage || { greeting: "Dear em iu ,", content: "" });
             }
         };
         window.addEventListener('message', handleMessage);
@@ -39,6 +47,68 @@ export default function PreviewPage({ params }: { params: Promise<{ token: strin
 
     if (!isLoaded) {
         return <div style={{ background: '#ffe3e6', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Dancing Script, cursive', color: '#891008', fontSize: 24 }}>Đang tải...</div>;
+    }
+
+    // Screen toggle button
+    const ScreenToggle = () => (
+        <div style={{
+            position: 'fixed',
+            bottom: 16,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 100,
+            display: 'flex',
+            gap: 8,
+            background: 'rgba(255,255,255,0.9)',
+            padding: 8,
+            borderRadius: 24,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+        }}>
+            <button
+                onClick={() => setCurrentScreen('collage')}
+                style={{
+                    padding: '8px 16px',
+                    borderRadius: 16,
+                    border: 'none',
+                    background: currentScreen === 'collage' ? '#891008' : 'transparent',
+                    color: currentScreen === 'collage' ? 'white' : '#891008',
+                    fontFamily: 'Dancing Script, cursive',
+                    fontSize: 14,
+                    cursor: 'pointer'
+                }}
+            >
+                Collage
+            </button>
+            <button
+                onClick={() => setCurrentScreen('letter')}
+                style={{
+                    padding: '8px 16px',
+                    borderRadius: 16,
+                    border: 'none',
+                    background: currentScreen === 'letter' ? '#891008' : 'transparent',
+                    color: currentScreen === 'letter' ? 'white' : '#891008',
+                    fontFamily: 'Dancing Script, cursive',
+                    fontSize: 14,
+                    cursor: 'pointer'
+                }}
+            >
+                Thư tình
+            </button>
+        </div>
+    );
+
+    if (currentScreen === 'letter') {
+        return (
+            <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
+                <LetterScreen
+                    name1={name1}
+                    name2={name2}
+                    images={letterImages && letterImages.length > 0 && letterImages.some(img => img) ? letterImages : images.slice(0, 3)}
+                    message={letterMessage}
+                />
+                <ScreenToggle />
+            </div>
+        );
     }
 
     return (
@@ -129,6 +199,7 @@ export default function PreviewPage({ params }: { params: Promise<{ token: strin
                 <Image src="/heart_paper.png" alt="Heart" width={70} height={70} className={collageStyles.heartPaperPendantRight} />
                 <Image src="/heart_paper.png" alt="Heart" width={70} height={70} className={collageStyles.heartPaperFrameFour} />
             </div>
+            <ScreenToggle />
         </div>
     );
 }

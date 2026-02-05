@@ -4,8 +4,6 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import QRCode from "qrcode";
-import { FiHeart, FiEye, FiCopy, FiPlus, FiList, FiLink, FiCamera, FiClock } from "react-icons/fi";
-import { FaHeart } from "react-icons/fa";
 import styles from "./admin.module.css";
 
 interface UploadedImage {
@@ -26,7 +24,7 @@ const IMAGE_LABELS = [
   "Ảnh khung 1 (trên trái)",
   "Ảnh khung 2 (trên phải)",
   "Ảnh trái tim trái",
-  "Ảnh trái tim phải",
+  "Ảnh trái tim phải", 
   "Ảnh khung 3 (dưới trái)",
   "Ảnh khung 4 (dưới phải)",
 ];
@@ -96,7 +94,7 @@ export default function AdminPage() {
         } else if (images[i].file) {
           const url = await uploadImage(images[i].file!);
           uploadedUrls.push(url);
-
+          
           // Update state with uploaded URL
           const newImages = [...images];
           newImages[i] = { ...newImages[i], url };
@@ -166,17 +164,17 @@ export default function AdminPage() {
     return (
       <div className={styles.container}>
         <div className={styles.successCard}>
-          <h1 className={styles.title}><FaHeart className={styles.successIcon} /> Thiệp đã được tạo!</h1>
-
+          <h1 className={styles.title}>🎉 Thiệp đã được tạo!</h1>
+          
           <div className={styles.cardInfo}>
-            <p><strong>{createdCard.name1}</strong> <FaHeart className={styles.heartSmall} /> <strong>{createdCard.name2}</strong></p>
+            <p><strong>{createdCard.name1}</strong> ❤️ <strong>{createdCard.name2}</strong></p>
           </div>
 
           <div className={styles.qrSection}>
-            <Image
-              src={createdCard.qrCode}
-              alt="QR Code"
-              width={250}
+            <Image 
+              src={createdCard.qrCode} 
+              alt="QR Code" 
+              width={250} 
               height={250}
               className={styles.qrCode}
             />
@@ -184,31 +182,31 @@ export default function AdminPage() {
           </div>
 
           <div className={styles.linkSection}>
-            <input
-              type="text"
-              value={createdCard.link}
-              readOnly
+            <input 
+              type="text" 
+              value={createdCard.link} 
+              readOnly 
               className={styles.linkInput}
             />
-            <button
+            <button 
               onClick={() => copyToClipboard(createdCard.link)}
               className={styles.copyBtn}
             >
-              <FiCopy /> Copy
+              📋 Copy
             </button>
           </div>
 
           <div className={styles.actions}>
-            <a
-              href={createdCard.link}
-              target="_blank"
+            <a 
+              href={createdCard.link} 
+              target="_blank" 
               rel="noopener noreferrer"
               className={styles.previewBtn}
             >
-              <FiEye /> Xem thiệp
+              👁️ Xem thiệp
             </a>
             <button onClick={handleReset} className={styles.newBtn}>
-              <FiPlus /> Tạo thiệp mới
+              ✨ Tạo thiệp mới
             </button>
           </div>
         </div>
@@ -220,13 +218,13 @@ export default function AdminPage() {
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.header}>
-          <h1 className={styles.title}><FaHeart className={styles.titleIcon} /> Tạo Thiệp Valentine</h1>
+          <h1 className={styles.title}>💕 Tạo Thiệp Valentine</h1>
           <div className={styles.headerLinks}>
-            <Link href="/admin/cards" className={styles.viewAllBtn}>
-              <FiList /> Xem thiệp
+            <Link href="/admin/links" className={styles.viewAllBtn}>
+              🔗 Link 1 lần
             </Link>
-            <Link href="/admin/links" className={styles.linksBtn}>
-              <FiLink /> Link 1 lần
+            <Link href="/admin/cards" className={styles.viewAllBtn}>
+              📋 Xem tất cả thiệp
             </Link>
           </div>
         </div>
@@ -243,7 +241,7 @@ export default function AdminPage() {
               placeholder="Ví dụ: Tuấn"
             />
           </div>
-          <div className={styles.heartIcon}><FaHeart /></div>
+          <div className={styles.heartIcon}>❤️</div>
           <div className={styles.nameInput}>
             <label>Tên người 2:</label>
             <input
@@ -274,7 +272,7 @@ export default function AdminPage() {
                     />
                   ) : (
                     <div className={styles.placeholder}>
-                      <FiCamera className={styles.cameraIcon} />
+                      <span>📷</span>
                       <span>Click để chọn ảnh</span>
                     </div>
                   )}
@@ -300,13 +298,11 @@ export default function AdminPage() {
           onClick={handleCreateCard}
           disabled={isUploading || isCreating}
         >
-          {isUploading ? (
-            <><FiClock /> Đang upload ảnh...</>
-          ) : isCreating ? (
-            <><FiClock /> Đang tạo thiệp...</>
-          ) : (
-            <><FaHeart /> Tạo Thiệp</>
-          )}
+          {isUploading
+            ? "⏳ Đang upload ảnh..."
+            : isCreating
+            ? "⏳ Đang tạo thiệp..."
+            : "💝 Tạo Thiệp"}
         </button>
       </div>
     </div>

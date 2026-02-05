@@ -10,6 +10,7 @@ import styles from "./create.module.css";
 import collageStyles from "../../page.module.css";
 import { generateLoveTextPattern } from "../../../utils/patterns";
 import DesktopWarning from "../../../components/DesktopWarning";
+import LetterScreen from "../../../components/LetterScreen";
 
 interface UploadedImage {
     file: File | null;
@@ -34,13 +35,24 @@ const IMAGE_LABELS = [
     "Ảnh khung 4",
 ];
 
+const LETTER_IMAGE_LABELS = [
+    "Ảnh thư 1",
+    "Ảnh thư 2",
+    "Ảnh thư 3",
+];
+
 export default function CreatePage({ params }: { params: Promise<{ token: string }> }) {
     const { token } = use(params);
     const [name1, setName1] = useState("");
     const [name2, setName2] = useState("");
-    const [images, setImages] = useState<UploadedImage[]>(
-        Array(6).fill({ file: null, preview: "", url: "" })
+    const [images, setImages] = useState<UploadedImage[]>(() => 
+        Array.from({ length: 6 }, () => ({ file: null, preview: "", url: "" }))
     );
+    const [letterImages, setLetterImages] = useState<UploadedImage[]>(() =>
+        Array.from({ length: 3 }, () => ({ file: null, preview: "", url: "" }))
+    );
+    const [letterGreeting, setLetterGreeting] = useState("Dear em iu ,");
+    const [letterContent, setLetterContent] = useState("");
     const [isUploading, setIsUploading] = useState(false);
     const [isCreating, setIsCreating] = useState(false);
     const [createdCard, setCreatedCard] = useState<CreatedCard | null>(null);
@@ -49,11 +61,15 @@ export default function CreatePage({ params }: { params: Promise<{ token: string
     const [isValid, setIsValid] = useState(false);
     const [linkError, setLinkError] = useState("");
     const [showPreview, setShowPreview] = useState(false);
+    const [previewScreen, setPreviewScreen] = useState<'collage' | 'letter'>('collage');
     const [editingImageIndex, setEditingImageIndex] = useState<number | null>(null);
     const [isMobile, setIsMobile] = useState(true);
     const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+    const letterFileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
     const previewFileInputRef = useRef<HTMLInputElement | null>(null);
+    const letterPreviewFileInputRef = useRef<HTMLInputElement | null>(null);
     const previewPopupRef = useRef<Window | null>(null);
+    const [editingLetterImageIndex, setEditingLetterImageIndex] = useState<number | null>(null);
 
     // Mobile detection
     useEffect(() => {
@@ -71,7 +87,9 @@ export default function CreatePage({ params }: { params: Promise<{ token: string
         const previewData = {
             name1,
             name2,
-            images: images.map(img => img.preview)
+            images: images.map(img => img.preview),
+            letterImages: letterImages.map(img => img.preview),
+            letterMessage: { greeting: letterGreeting, content: letterContent }
         };
         localStorage.setItem(`preview_${token}`, JSON.stringify(previewData));
 
@@ -132,10 +150,27 @@ export default function CreatePage({ params }: { params: Promise<{ token: string
         setImages(newImages);
     };
 
+    const handleLetterImageSelect = (index: number, file: File) => {
+        const newImages = [...letterImages];
+        newImages[index] = {
+            file,
+            preview: URL.createObjectURL(file),
+            url: "",
+        };
+        setLetterImages(newImages);
+    };
+
     const handlePreviewImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.[0] && editingImageIndex !== null) {
             handleImageSelect(editingImageIndex, e.target.files[0]);
             setEditingImageIndex(null);
+        }
+    };
+
+    const handleLetterPreviewImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.[0] && editingLetterImageIndex !== null) {
+            handleLetterImageSelect(editingLetterImageIndex, e.target.files[0]);
+            setEditingLetterImageIndex(null);
         }
     };
 
@@ -191,8 +226,28 @@ export default function CreatePage({ params }: { params: Promise<{ token: string
                 }
             }
 
+            // Upload letter images
+            const uploadedLetterUrls: string[] = [];
+            for (let i = 0; i < letterImages.length; i++) {
+                if (letterImages[i].url) {
+                    uploadedLetterUrls.push(letterImages[i].url);
+                } else if (letterImages[i].file) {
+                    const url = await uploadImage(letterImages[i].file!);
+                    uploadedLetterUrls.push(url);
+
+                    const newImages = [...letterImages];
+                    newImages[i] = { ...newImages[i], url };
+                    setLetterImages(newImages);
+                }
+            }
+
             setIsUploading(false);
             setIsCreating(true);
+
+            console.log('Submitting card data:', {
+                letterImages: uploadedLetterUrls,
+                letterMessage: { greeting: letterGreeting, content: letterContent }
+            });
 
             const response = await fetch("/api/cards", {
                 method: "POST",
@@ -201,6 +256,8 @@ export default function CreatePage({ params }: { params: Promise<{ token: string
                     name1: name1.trim(),
                     name2: name2.trim(),
                     images: uploadedUrls,
+                    letterImages: uploadedLetterUrls,
+                    letterMessage: { greeting: letterGreeting, content: letterContent },
                 }),
             });
 
@@ -332,11 +389,72 @@ export default function CreatePage({ params }: { params: Promise<{ token: string
                     onChange={handlePreviewImageChange}
                     style={{ display: "none" }}
                 />
+                <input
+                    type="file"
+                    accept="image/*"
+                    ref={letterPreviewFileInputRef}
+                    onChange={handleLetterPreviewImageChange}
+                    style={{ display: "none" }}
+                />
                 <button className={styles.previewCloseBtn} onClick={() => setShowPreview(false)}>
                     <FiX /> Đóng
                 </button>
                 <div className={styles.previewHint}>Nhấn vào ảnh để thay đổi</div>
 
+                {/* Screen Toggle */}
+                <div style={{
+                    position: 'fixed',
+                    bottom: 16,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    zIndex: 1001,
+                    display: 'flex',
+                    gap: 8,
+                    background: 'rgba(255,255,255,0.9)',
+                    padding: 8,
+                    borderRadius: 24,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                }}>
+                    <button
+                        onClick={() => setPreviewScreen('collage')}
+                        style={{
+                            padding: '8px 16px',
+                            borderRadius: 16,
+                            border: 'none',
+                            background: previewScreen === 'collage' ? '#891008' : 'transparent',
+                            color: previewScreen === 'collage' ? 'white' : '#891008',
+                            fontFamily: 'Dancing Script, cursive',
+                            fontSize: 14,
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Collage
+                    </button>
+                    <button
+                        onClick={() => setPreviewScreen('letter')}
+                        style={{
+                            padding: '8px 16px',
+                            borderRadius: 16,
+                            border: 'none',
+                            background: previewScreen === 'letter' ? '#891008' : 'transparent',
+                            color: previewScreen === 'letter' ? 'white' : '#891008',
+                            fontFamily: 'Dancing Script, cursive',
+                            fontSize: 14,
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Thư tình
+                    </button>
+                </div>
+
+                {previewScreen === 'letter' ? (
+                    <LetterScreen
+                        name1={name1}
+                        name2={name2}
+                        images={letterImages.some(img => img.preview) ? letterImages.map(img => img.preview) : images.slice(0, 3).map(img => img.preview)}
+                        message={{ greeting: letterGreeting, content: letterContent }}
+                    />
+                ) : (
                 <div className={collageStyles.collageContainer}>
                     <div className={collageStyles.collageBgOverlay}>
                         <div className="love-text-pattern" style={{ opacity: 0.3 }}>
@@ -425,6 +543,7 @@ export default function CreatePage({ params }: { params: Promise<{ token: string
                         <Image src="/heart_paper.png" alt="Heart" width={70} height={70} className={collageStyles.heartPaperFrameFour} />
                     </div>
                 </div>
+                )}
             </div>
         );
     }
@@ -454,7 +573,7 @@ export default function CreatePage({ params }: { params: Promise<{ token: string
 
                 {/* Images Section */}
                 <div className={styles.imagesSection}>
-                    <h2>Upload 6 ảnh cho thiệp</h2>
+                    <h2>Upload 6 ảnh cho trang Collage</h2>
                     <div className={styles.imageGrid}>
                         {IMAGE_LABELS.map((label, index) => (
                             <div key={index} className={styles.imageItem}>
@@ -478,6 +597,58 @@ export default function CreatePage({ params }: { params: Promise<{ token: string
                                 />
                             </div>
                         ))}
+                    </div>
+                </div>
+
+                {/* Letter Images Section */}
+                <div className={styles.imagesSection}>
+                    <h2>Upload 3 ảnh cho trang Thư tình</h2>
+                    <div className={styles.imageGrid}>
+                        {LETTER_IMAGE_LABELS.map((label, index) => (
+                            <div key={index} className={styles.imageItem}>
+                                <span className={styles.imageLabel}>{label}</span>
+                                <div className={styles.imageBox} onClick={() => letterFileInputRefs.current[index]?.click()}>
+                                    {letterImages[index].preview ? (
+                                        <Image src={letterImages[index].preview} alt={`Letter Preview ${index + 1}`} fill style={{ objectFit: "cover" }} />
+                                    ) : (
+                                        <div className={styles.imagePlaceholder}>
+                                            <FiCamera />
+                                            <span>Chọn ảnh</span>
+                                        </div>
+                                    )}
+                                </div>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    ref={(el) => { letterFileInputRefs.current[index] = el; }}
+                                    onChange={(e) => { if (e.target.files?.[0]) handleLetterImageSelect(index, e.target.files[0]); }}
+                                    style={{ display: "none" }}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Letter Message Section */}
+                <div className={styles.messageSection}>
+                    <h2>Nội dung thư tình</h2>
+                    <div className={styles.messageField}>
+                        <label>Lời chào</label>
+                        <input
+                            type="text"
+                            value={letterGreeting}
+                            onChange={(e) => setLetterGreeting(e.target.value)}
+                            placeholder="Dear em iu ,"
+                        />
+                    </div>
+                    <div className={styles.messageField}>
+                        <label>Nội dung</label>
+                        <textarea
+                            value={letterContent}
+                            onChange={(e) => setLetterContent(e.target.value)}
+                            placeholder="Viết lời yêu thương của bạn ở đây..."
+                            rows={5}
+                        />
                     </div>
                 </div>
 

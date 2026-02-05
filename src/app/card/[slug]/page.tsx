@@ -7,6 +7,7 @@ import styles from "../../page.module.css";
 import LoadingScreen from "../../../components/LoadingScreen";
 import MainScreen from "../../../components/MainScreen";
 import CollageScreen from "../../../components/CollageScreen";
+import LetterScreen from "../../../components/LetterScreen";
 import DesktopWarning from "../../../components/DesktopWarning";
 import { preloadAllAssets } from "../../../utils/preloadAssets";
 
@@ -14,6 +15,11 @@ interface CardData {
   name1: string;
   name2: string;
   images: string[];
+  letterImages: string[];
+  letterMessage: {
+    greeting: string;
+    content: string;
+  };
   slug: string;
 }
 
@@ -22,7 +28,7 @@ const MIN_LOADING_TIME = 2000;
 
 export default function CardPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const [screenState, setScreenState] = useState<'loading' | 'main' | 'collage'>('loading');
+  const [screenState, setScreenState] = useState<'loading' | 'main' | 'collage' | 'letter'>('loading');
   const [isHeartTransition, setIsHeartTransition] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
   const [isClient, setIsClient] = useState(false);
@@ -92,6 +98,14 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
     setIsHeartTransition(true);
     setTimeout(() => {
       setScreenState('collage');
+      setIsHeartTransition(false);
+    }, 700);
+  };
+
+  const handleGoLetter = () => {
+    setIsHeartTransition(true);
+    setTimeout(() => {
+      setScreenState('letter');
       setIsHeartTransition(false);
     }, 700);
   };
@@ -171,11 +185,29 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
             className={styles.screenWrapper}
+            onClick={handleGoLetter}
+            style={{ cursor: 'pointer' }}
           >
             <CollageScreen
               name1={cardData.name1}
               name2={cardData.name2}
               images={cardData.images}
+            />
+          </motion.div>
+        )}
+        {screenState === 'letter' && (
+          <motion.div
+            key="letter"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className={styles.screenWrapper}
+          >
+            <LetterScreen
+              name1={cardData.name1}
+              name2={cardData.name2}
+              images={cardData.letterImages && cardData.letterImages.length > 0 ? cardData.letterImages : cardData.images.slice(0, 3)}
+              message={cardData.letterMessage}
             />
           </motion.div>
         )}

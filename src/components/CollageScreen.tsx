@@ -60,7 +60,7 @@ export default function CollageScreen({ name1, name2, images }: CollageScreenPro
                         <Image src="/khung_1.png" alt="frame" width={0} height={0} sizes="100vw" className={styles.photoFrameImg} />
                         <div className={styles.photoPlaceholder}>
                             {images?.[0] ? (
-                                <Image src={images[0]} alt="Photo 1" fill style={{ objectFit: 'cover' }} />
+                                <Image src={images[0]} alt="Photo 1" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                             ) : (
                                 'Photo'
                             )}
@@ -75,7 +75,7 @@ export default function CollageScreen({ name1, name2, images }: CollageScreenPro
                         <Image src="/stamp.png" alt="frame" width={0} height={0} sizes="100vw" className={styles.photoFrameImg} />
                         <div className={styles.photoPlaceholder}>
                             {images?.[1] ? (
-                                <Image src={images[1]} alt="Photo 2" fill style={{ objectFit: 'cover' }} />
+                                <Image src={images[1]} alt="Photo 2" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                             ) : (
                                 'Photo'
                             )}
@@ -95,14 +95,14 @@ export default function CollageScreen({ name1, name2, images }: CollageScreenPro
                         />
                         <div className={`${styles.heartPendantSlot} ${styles.heartPendantSlotLeft}`}>
                             {images?.[2] ? (
-                                <Image src={images[2]} alt="Photo 3" fill style={{ objectFit: 'cover' }} />
+                                <Image src={images[2]} alt="Photo 3" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                             ) : (
                                 <span>Photo</span>
                             )}
                         </div>
                         <div className={`${styles.heartPendantSlot} ${styles.heartPendantSlotRight}`}>
                             {images?.[3] ? (
-                                <Image src={images[3]} alt="Photo 4" fill style={{ objectFit: 'cover' }} />
+                                <Image src={images[3]} alt="Photo 4" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                             ) : (
                                 <span>Photo</span>
                             )}
@@ -116,7 +116,7 @@ export default function CollageScreen({ name1, name2, images }: CollageScreenPro
                         <Image src="/stamp.png" alt="frame" width={0} height={0} sizes="100vw" className={styles.photoFrameImg} />
                         <div className={styles.photoPlaceholder}>
                             {images?.[4] ? (
-                                <Image src={images[4]} alt="Photo 5" fill style={{ objectFit: 'cover' }} />
+                                <Image src={images[4]} alt="Photo 5" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                             ) : (
                                 'Photo'
                             )}
@@ -130,7 +130,7 @@ export default function CollageScreen({ name1, name2, images }: CollageScreenPro
                         <Image src="/khung_2.png" alt="frame" width={0} height={0} sizes="100vw" className={styles.photoFrameImg} />
                         <div className={styles.photoPlaceholder}>
                             {images?.[5] ? (
-                                <Image src={images[5]} alt="Photo 6" fill style={{ objectFit: 'cover' }} />
+                                <Image src={images[5]} alt="Photo 6" fill sizes="100vw" style={{ objectFit: 'cover' }} />
                             ) : (
                                 'Photo'
                             )}
