@@ -13,7 +13,7 @@ interface CollageScreenProps {
 
 export default function CollageScreen({ name1, name2, images }: CollageScreenProps) {
     // Drop animation wrapper - animates the wrapper, not the positioned element
-    const DropWrapper = ({ children, delay, className }: { children: React.ReactNode; delay: number; className?: string }) => (
+    const DropWrapper = ({ children, delay, className, zIndex = 1 }: { children: React.ReactNode; delay: number; className?: string; zIndex?: number }) => (
         <motion.div
             initial={{ y: -200, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -23,7 +23,7 @@ export default function CollageScreen({ name1, name2, images }: CollageScreenPro
                 ease: [0.34, 1.56, 0.64, 1]
             }}
             className={className}
-            style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0, pointerEvents: 'none' }}
+            style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0, pointerEvents: 'none', zIndex }}
         >
             <div style={{ pointerEvents: 'auto' }}>
                 {children}
@@ -111,7 +111,7 @@ export default function CollageScreen({ name1, name2, images }: CollageScreenPro
                 </DropWrapper>
 
                 {/* Photo frame 3 - drops fourth */}
-                <DropWrapper delay={0.55}>
+                <DropWrapper delay={0.7} zIndex={2}>
                     <div className={`${styles.photoFrame} ${styles.photoFrameThree}`}>
                         <Image src="/stamp.png" alt="frame" width={0} height={0} sizes="100vw" className={styles.photoFrameImg} />
                         <div className={styles.photoPlaceholder}>
@@ -125,7 +125,7 @@ export default function CollageScreen({ name1, name2, images }: CollageScreenPro
                 </DropWrapper>
 
                 {/* Photo frame 4 - drops fifth */}
-                <DropWrapper delay={0.7}>
+                <DropWrapper delay={0.55} zIndex={1}>
                     <div className={`${styles.photoFrame} ${styles.photoFrameFour}`}>
                         <Image src="/khung_2.png" alt="frame" width={0} height={0} sizes="100vw" className={styles.photoFrameImg} />
                         <div className={styles.photoPlaceholder}>

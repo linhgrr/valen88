@@ -6,7 +6,6 @@ import Image from "next/image";
 import styles from "../../page.module.css";
 import LoadingScreen from "../../../components/LoadingScreen";
 import MainScreen from "../../../components/MainScreen";
-import OpenedEnvelopeScreen from "../../../components/OpenedEnvelopeScreen";
 import CollageScreen from "../../../components/CollageScreen";
 import DesktopWarning from "../../../components/DesktopWarning";
 import { preloadAllAssets } from "../../../utils/preloadAssets";
@@ -23,7 +22,7 @@ const MIN_LOADING_TIME = 2000;
 
 export default function CardPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const [screenState, setScreenState] = useState<'loading' | 'closed' | 'opened' | 'collage'>('loading');
+  const [screenState, setScreenState] = useState<'loading' | 'main' | 'collage'>('loading');
   const [isHeartTransition, setIsHeartTransition] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
   const [isClient, setIsClient] = useState(false);
@@ -34,14 +33,14 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
   // Check if screen is mobile size
   useEffect(() => {
     setIsClient(true);
-    
+
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= MOBILE_MAX_WIDTH);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -51,7 +50,7 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
       try {
         const response = await fetch(`/api/cards/${slug}`);
         const data = await response.json();
-        
+
         if (data.success) {
           setCardData(data.card);
         } else {
@@ -70,12 +69,12 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
     if (!isMobile || !cardData) return;
 
     const startTime = Date.now();
-    
+
     // Preload static assets + card images from API
     preloadAllAssets(cardData.images).then(() => {
       const elapsed = Date.now() - startTime;
       const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsed);
-      
+
       setTimeout(() => {
         setAssetsLoaded(true);
       }, remainingTime);
@@ -85,13 +84,9 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
   // Transition to main screen when assets are loaded
   useEffect(() => {
     if (assetsLoaded && screenState === 'loading') {
-      setScreenState('closed');
+      setScreenState('main');
     }
   }, [assetsLoaded, screenState]);
-
-  const handleOpenEnvelope = () => {
-    setScreenState('opened');
-  };
 
   const handleGoCollage = () => {
     setIsHeartTransition(true);
@@ -112,10 +107,10 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
   if (error) {
     return (
       <main className={styles.container}>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           height: '100%',
           flexDirection: 'column',
           gap: '16px',
@@ -154,7 +149,7 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
             <LoadingScreen />
           </motion.div>
         )}
-        {screenState === 'closed' && (
+        {screenState === 'main' && (
           <motion.div
             key="main"
             initial={{ opacity: 0 }}
@@ -162,20 +157,12 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
             transition={{ duration: 0.5 }}
             className={styles.screenWrapper}
           >
-            <MainScreen onOpenEnvelope={handleOpenEnvelope} />
-          </motion.div>
-        )}
-        {screenState === 'opened' && (
-          <div
-            key="opened"
-            className={styles.screenWrapper}
-          >
-            <OpenedEnvelopeScreen 
-              name1={cardData.name1} 
-              name2={cardData.name2} 
-              onGoCollage={handleGoCollage} 
+            <MainScreen
+              name1={cardData.name1}
+              name2={cardData.name2}
+              onGoCollage={handleGoCollage}
             />
-          </div>
+          </motion.div>
         )}
         {screenState === 'collage' && (
           <motion.div
@@ -185,8 +172,8 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
             transition={{ duration: 0.8 }}
             className={styles.screenWrapper}
           >
-            <CollageScreen 
-              name1={cardData.name1} 
+            <CollageScreen
+              name1={cardData.name1}
               name2={cardData.name2}
               images={cardData.images}
             />

@@ -7,7 +7,6 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import LoadingScreen from "../components/LoadingScreen";
 import MainScreen from "../components/MainScreen";
-import OpenedEnvelopeScreen from "../components/OpenedEnvelopeScreen";
 import CollageScreen from "../components/CollageScreen";
 import DesktopWarning from "../components/DesktopWarning";
 import { preloadStaticAssets } from "../utils/preloadAssets";
@@ -17,7 +16,7 @@ const MIN_LOADING_TIME = 2000; // Minimum loading time in ms
 
 function PageContent() {
   const searchParams = useSearchParams();
-  const [screenState, setScreenState] = useState<'loading' | 'closed' | 'opened' | 'collage'>('loading');
+  const [screenState, setScreenState] = useState<'loading' | 'main' | 'collage'>('loading');
   const [isHeartTransition, setIsHeartTransition] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
   const [isClient, setIsClient] = useState(false);
@@ -30,14 +29,14 @@ function PageContent() {
   // Check if screen is mobile size
   useEffect(() => {
     setIsClient(true);
-    
+
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= MOBILE_MAX_WIDTH);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -46,11 +45,11 @@ function PageContent() {
     if (!isMobile) return;
 
     const startTime = Date.now();
-    
+
     preloadStaticAssets().then(() => {
       const elapsed = Date.now() - startTime;
       const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsed);
-      
+
       // Ensure minimum loading time for smooth UX
       setTimeout(() => {
         setAssetsLoaded(true);
@@ -61,13 +60,9 @@ function PageContent() {
   // Transition to main screen when assets are loaded
   useEffect(() => {
     if (assetsLoaded && screenState === 'loading') {
-      setScreenState('closed');
+      setScreenState('main');
     }
   }, [assetsLoaded, screenState]);
-
-  const handleOpenEnvelope = () => {
-    setScreenState('opened');
-  };
 
   const handleGoCollage = () => {
     setIsHeartTransition(true);
@@ -101,7 +96,7 @@ function PageContent() {
             <LoadingScreen />
           </motion.div>
         )}
-        {screenState === 'closed' && (
+        {screenState === 'main' && (
           <motion.div
             key="main"
             initial={{ opacity: 0 }}
@@ -109,16 +104,8 @@ function PageContent() {
             transition={{ duration: 0.5 }}
             className={styles.screenWrapper}
           >
-            <MainScreen onOpenEnvelope={handleOpenEnvelope} />
+            <MainScreen name1={name1} name2={name2} onGoCollage={handleGoCollage} />
           </motion.div>
-        )}
-        {screenState === 'opened' && (
-          <div
-            key="opened"
-            className={styles.screenWrapper}
-          >
-            <OpenedEnvelopeScreen name1={name1} name2={name2} onGoCollage={handleGoCollage} />
-          </div>
         )}
         {screenState === 'collage' && (
           <motion.div
