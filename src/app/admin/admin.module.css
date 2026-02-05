@@ -3,8 +3,10 @@
   background: linear-gradient(135deg, #ffe3e6 0%, #ffb6c1 50%, #ff9aa2 100%);
   padding: 20px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   font-family: 'Dancing Script', cursive;
 }
 
@@ -297,4 +299,69 @@
 
 .newBtn:hover {
   background: #fff0f2;
+}
+
+/* React Icons */
+.titleIcon,
+.successIcon {
+  color: #891008;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.heartSmall {
+  color: #891008;
+  font-size: 18px;
+  vertical-align: middle;
+  margin: 0 4px;
+}
+
+.cameraIcon {
+  font-size: 32px;
+  color: #b5495b;
+}
+
+/* Header Links */
+.headerLinks {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.viewAllBtn,
+.linksBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: #891008;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.linksBtn {
+  background: #4CAF50;
+}
+
+.viewAllBtn:hover,
+.linksBtn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+/* Button Icons */
+.copyBtn,
+.previewBtn,
+.newBtn,
+.createBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }

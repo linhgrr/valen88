@@ -15,6 +15,26 @@
   gap: 16px;
 }
 
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #891008;
+  font-family: sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.backBtn:hover {
+  text-decoration: underline;
+}
+
 .title {
   color: #891008;
   font-size: 32px;
@@ -68,8 +88,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 /* Empty State */
@@ -149,6 +176,15 @@
   font-size: 22px;
   color: #891008;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.heartIcon {
+  color: #891008;
+  font-size: 16px;
 }
 
 .cardDate {
@@ -167,6 +203,9 @@
 .qrBtn,
 .copyBtn,
 .viewBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 10px 16px;
   border: none;
   border-radius: 10px;
@@ -279,8 +318,154 @@
     flex-direction: column;
     text-align: center;
   }
-  
+
   .grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Edit & Delete Buttons */
+.editBtn,
+.deleteBtn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  font-family: sans-serif;
+}
+
+.editBtn {
+  background: #4CAF50;
+  color: white;
+}
+
+.deleteBtn {
+  background: #f44336;
+  color: white;
+}
+
+.editBtn:hover,
+.deleteBtn:hover {
+  transform: scale(1.05);
+}
+
+.editBtn:hover {
+  background: #45a049;
+}
+
+.deleteBtn:hover {
+  background: #d32f2f;
+}
+
+/* Edit Form */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.formGroup label {
+  font-size: 14px;
+  color: #666;
+  font-family: sans-serif;
+}
+
+.formGroup input {
+  padding: 12px 14px;
+  border: 2px solid #ffb6c1;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: sans-serif;
+  transition: border-color 0.3s;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: #891008;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.cancelBtn,
+.saveBtn,
+.confirmDeleteBtn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: sans-serif;
+}
+
+.cancelBtn {
+  background: #e0e0e0;
+  color: #666;
+}
+
+.saveBtn {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+}
+
+.confirmDeleteBtn {
+  background: linear-gradient(135deg, #f44336, #c62828);
+  color: white;
+}
+
+.cancelBtn:hover {
+  background: #d0d0d0;
+}
+
+.saveBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.confirmDeleteBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.cancelBtn:disabled,
+.saveBtn:disabled,
+.confirmDeleteBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Delete Warning */
+.deleteWarning {
+  font-size: 16px;
+  color: #333;
+  font-family: sans-serif;
+  margin-bottom: 8px;
+}
+
+.deleteWarning strong {
+  color: #891008;
+}
+
+.deleteHint {
+  font-size: 14px;
+  color: #f44336;
+  font-family: sans-serif;
+  margin-bottom: 16px;
 }

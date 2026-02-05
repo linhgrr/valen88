@@ -1,0 +1,492 @@
+/* Mobile-first responsive design */
+.container {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: linear-gradient(135deg, #ffe3e6 0%, #ffb6c1 50%, #ff9aa2 100%);
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Status Cards (Loading, Error) */
+.statusCard {
+    background: white;
+    border-radius: 24px;
+    padding: 40px 24px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(137, 16, 8, 0.1);
+}
+
+.spinIcon {
+    font-size: 48px;
+    color: #891008;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.errorIcon {
+    font-size: 64px;
+    color: #891008;
+}
+
+.statusTitle {
+    font-size: 24px;
+    color: #891008;
+    margin: 16px 0 8px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.statusText {
+    color: #666;
+    font-size: 14px;
+}
+
+.errorText {
+    color: #891008;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+/* Success Card */
+.successCard {
+    background: white;
+    border-radius: 24px;
+    padding: 32px 20px;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 32px rgba(137, 16, 8, 0.1);
+}
+
+.successIcon {
+    font-size: 48px;
+    color: #891008;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.successTitle {
+    font-size: 28px;
+    color: #891008;
+    margin: 12px 0 20px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.namesDisplay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 20px;
+    color: #891008;
+    font-family: 'Dancing Script', cursive;
+    margin-bottom: 24px;
+}
+
+.heartSmall {
+    color: #ff6b8a;
+    font-size: 16px;
+}
+
+.qrSection {
+    margin-bottom: 20px;
+}
+
+.qrCode {
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.qrHint {
+    color: #666;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+.linkBox {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.linkInput {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ffb6c1;
+    border-radius: 12px;
+    font-size: 12px;
+    min-width: 0;
+}
+
+.copyBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    background: #ffb6c1;
+    color: #891008;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.viewBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: #891008;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Form Card */
+.formCard {
+    background: white;
+    border-radius: 24px;
+    padding: 24px 16px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 8px 32px rgba(137, 16, 8, 0.1);
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 26px;
+    color: #891008;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.titleIcon {
+    color: #891008;
+}
+
+.error {
+    background: #ffe0e0;
+    color: #891008;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Names Section */
+.namesSection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.nameField {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nameField label {
+    color: #891008;
+    font-size: 14px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.nameField input {
+    padding: 14px;
+    border: 2px solid #ffb6c1;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.nameField input:focus {
+    outline: none;
+    border-color: #891008;
+}
+
+.heartDivider {
+    display: flex;
+    justify-content: center;
+    color: #ff6b8a;
+    font-size: 24px;
+    padding: 4px 0;
+}
+
+/* Images Section */
+.imagesSection {
+    margin-bottom: 24px;
+}
+
+.imagesSection h2 {
+    text-align: center;
+    color: #891008;
+    font-size: 18px;
+    margin-bottom: 16px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.imageGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.imageItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.imageLabel {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+
+.imageBox {
+    position: relative;
+    aspect-ratio: 1;
+    border: 2px dashed #ffb6c1;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #fff8f9;
+    transition: all 0.3s;
+}
+
+.imageBox:hover {
+    border-color: #891008;
+}
+
+.imagePlaceholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #b5495b;
+    gap: 4px;
+}
+
+.imagePlaceholder svg {
+    font-size: 24px;
+}
+
+.imagePlaceholder span {
+    font-size: 11px;
+}
+
+/* Preview Section */
+.previewSection {
+    margin-bottom: 24px;
+}
+
+.previewToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.previewToggle:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.previewDisabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.previewDisabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.previewWarning {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    color: #ff6b6b;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* Full-screen Preview */
+.previewFullscreen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #ffe3e6 0%, #ffb6c1 50%, #ff9aa2 100%);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.previewCloseBtn {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.previewHint {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001;
+    padding: 8px 16px;
+    background: rgba(137, 16, 8, 0.9);
+    color: white;
+    border-radius: 20px;
+    font-size: 21px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Create Button */
+.createBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #ff6b8a, #891008);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 20px;
+    font-family: 'Dancing Script', cursive;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.createBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(137, 16, 8, 0.3);
+}
+
+.createBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Tablet and up */
+@media (min-width: 480px) {
+    .container {
+        padding: 24px;
+    }
+
+    .formCard {
+        padding: 32px 24px;
+    }
+
+    .namesSection {
+        flex-direction: row;
+        align-items: flex-end;
+    }
+
+    .nameField {
+        flex: 1;
+    }
+
+    .heartDivider {
+        padding-bottom: 14px;
+    }
+
+    .imageGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .previewFrame {
+        width: 100px;
+        height: 100px;
+    }
+
+    .heartFrame {
+        width: 90px;
+        height: 90px;
+    }
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .formCard {
+        max-width: 600px;
+        padding: 40px 32px;
+    }
+
+    .title {
+        font-size: 32px;
+    }
+
+    .previewFrame {
+        width: 120px;
+        height: 120px;
+    }
+
+    .heartFrame {
+        width: 100px;
+        height: 100px;
+    }
+}

@@ -1,6 +1,7 @@
 .container {
   position: relative;
-  width: 100vw;
+  width: 100%;
+  min-width: 320px;
   height: 100vh;
   height: 100dvh;
   background: linear-gradient(135deg, #ffe3e6 0%, #ffb6c1 50%, #ff9aa2 100%);
@@ -40,47 +41,49 @@
   position: relative;
   z-index: 10;
   text-align: center;
-  padding: 60px 40px;
+  padding: 40px 24px;
   background: rgba(255, 255, 255, 0.85);
-  border-radius: 30px;
+  border-radius: 24px;
   box-shadow: 0 20px 60px rgba(137, 16, 8, 0.15);
-  max-width: 500px;
+  max-width: 90%;
+  width: 400px;
   backdrop-filter: blur(10px);
+  margin: 16px;
 }
 
 .phoneIcon {
-  font-size: 80px;
+  font-size: 60px;
   margin-bottom: 10px;
 }
 
 .heartIcon {
-  font-size: 50px;
-  margin-bottom: 20px;
+  font-size: 40px;
+  margin-bottom: 16px;
 }
 
 .title {
   font-family: "Dancing Script", cursive;
-  font-size: 36px;
+  font-size: 28px;
   color: #891008;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   font-weight: 700;
 }
 
 .subtitle {
   font-family: "Dancing Script", cursive;
-  font-size: 20px;
+  font-size: 16px;
   color: #b5495b;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   line-height: 1.5;
 }
 
 .instructions {
   font-family: "Dancing Script", cursive;
-  font-size: 18px;
+  font-size: 16px;
   color: #666;
-  line-height: 2;
+  line-height: 1.8;
 }
 
 .instructions p {
-  margin: 8px 0;
+  margin: 6px 0;
 }
