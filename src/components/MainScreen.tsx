@@ -51,8 +51,8 @@ export default function MainScreen({ name1, name2, onGoCollage }: MainScreenProp
             {/* Closed Envelope - hidden when opened */}
             <motion.div
                 className={styles.envelopeContainer}
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 onClick={handleClosedEnvelopeClick}
                 style={{
