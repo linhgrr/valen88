@@ -8,8 +8,11 @@ export async function GET(
     { params }: { params: Promise<{ token: string }> }
 ) {
     try {
-        await dbConnect();
-        const { token } = await params;
+        // Start db connection and params resolution in parallel (async-parallel)
+        const [, { token }] = await Promise.all([
+            dbConnect(),
+            params
+        ]);
 
         const link = await OneTimeLink.findOne({ token });
 
@@ -43,9 +46,12 @@ export async function PUT(
     { params }: { params: Promise<{ token: string }> }
 ) {
     try {
-        await dbConnect();
-        const { token } = await params;
-        const body = await request.json();
+        // Start all async operations in parallel (async-parallel)
+        const [, { token }, body] = await Promise.all([
+            dbConnect(),
+            params,
+            request.json()
+        ]);
         const { cardId } = body;
 
         const link = await OneTimeLink.findOneAndUpdate(
@@ -79,8 +85,11 @@ export async function DELETE(
     { params }: { params: Promise<{ token: string }> }
 ) {
     try {
-        await dbConnect();
-        const { token } = await params;
+        // Start db connection and params resolution in parallel (async-parallel)
+        const [, { token }] = await Promise.all([
+            dbConnect(),
+            params
+        ]);
 
         const link = await OneTimeLink.findOneAndDelete({ token });
 

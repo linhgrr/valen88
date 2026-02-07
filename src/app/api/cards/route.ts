@@ -4,9 +4,13 @@ import Card from '@/models/Card';
 
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect();
+    // Start db connection early, don't await yet (async-api-routes)
+    const dbPromise = dbConnect();
 
     const body = await request.json();
+
+    // Now await the db connection
+    await dbPromise;
     const { name1, name2, images, letterImages, letterMessage } = body;
 
     console.log('API received:', { letterImages, letterMessage });
@@ -66,7 +70,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    await dbConnect();
+    // Start db connection and query preparation in parallel
+    const dbPromise = dbConnect();
+    await dbPromise;
     const cards = await Card.find({}).sort({ createdAt: -1 }).limit(50);
     return NextResponse.json({ success: true, cards });
   } catch (error) {

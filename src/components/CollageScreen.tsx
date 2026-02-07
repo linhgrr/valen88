@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import styles from "../app/page.module.css";
@@ -11,9 +12,16 @@ interface CollageScreenProps {
     images?: string[]; // Optional array of 6 image URLs
 }
 
-export default function CollageScreen({ name1, name2, images }: CollageScreenProps) {
-    // Drop animation wrapper - animates the wrapper, not the positioned element
-    const DropWrapper = ({ children, delay, className, zIndex = 1 }: { children: React.ReactNode; delay: number; className?: string; zIndex?: number }) => (
+// Hoist DropWrapper outside component to avoid recreation on every render (rendering-hoist-jsx)
+interface DropWrapperProps {
+    children: React.ReactNode;
+    delay: number;
+    className?: string;
+    zIndex?: number;
+}
+
+const DropWrapper = memo(function DropWrapper({ children, delay, className, zIndex = 1 }: DropWrapperProps) {
+    return (
         <motion.div
             initial={{ y: -200, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -30,6 +38,9 @@ export default function CollageScreen({ name1, name2, images }: CollageScreenPro
             </div>
         </motion.div>
     );
+});
+
+export default function CollageScreen({ name1, name2, images }: CollageScreenProps) {
 
     return (
         <div className={styles.collageContainer}>

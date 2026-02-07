@@ -7,8 +7,11 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    await dbConnect();
-    const { slug } = await params;
+    // Start db connection and params resolution in parallel (async-parallel)
+    const [, { slug }] = await Promise.all([
+      dbConnect(),
+      params
+    ]);
 
     const card = await Card.findOne({ slug });
 
@@ -40,9 +43,12 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    await dbConnect();
-    const { slug } = await params;
-    const body = await request.json();
+    // Start all async operations in parallel (async-parallel)
+    const [, { slug }, body] = await Promise.all([
+      dbConnect(),
+      params,
+      request.json()
+    ]);
     const { name1, name2 } = body;
 
     if (!name1 || !name2) {
@@ -81,8 +87,11 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    await dbConnect();
-    const { slug } = await params;
+    // Start db connection and params resolution in parallel (async-parallel)
+    const [, { slug }] = await Promise.all([
+      dbConnect(),
+      params
+    ]);
 
     const card = await Card.findOneAndDelete({ slug });
 

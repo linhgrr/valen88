@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Optimize barrel imports for better bundle size and faster cold starts
+  experimental: {
+    optimizePackageImports: ['react-icons', 'framer-motion'],
+  },
   images: {
     remotePatterns: [
       {
@@ -13,6 +17,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'ibb.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'objectstorageapi.ap-southeast-1.clawcloudrun.com',
       },
     ],
   },

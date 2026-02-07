@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import styles from "./LetterScreen.module.css";
@@ -15,23 +16,16 @@ interface LetterScreenProps {
     };
 }
 
-export default function LetterScreen({ name1, name2, images, message }: LetterScreenProps) {
-    const defaultMessage = {
-        greeting: "Dear em iu ,",
-        content: `Sau một thời gian tìm hiểu, bộ phận thẩm định tình cảm đã quyết định gia hạn hợp đồng yêu đương với bạn thêm... trọn đời. Dù bạn thi thoảng hay dỗi, hay ăn tranh phần của mình, nhưng vì bạn quá đáng yêu nên mình đành 'chịu đựng' vậy.`
-    };
+// Hoist DropWrapper outside component to avoid recreation on every render (rendering-hoist-jsx)
+interface DropWrapperProps {
+    children: React.ReactNode;
+    delay: number;
+    className?: string;
+    zIndex?: number;
+}
 
-    // Use message if it has content, otherwise use default
-    const displayMessage = {
-        greeting: message?.greeting || defaultMessage.greeting,
-        content: message?.content || defaultMessage.content
-    };
-
-    // Use letterImages if provided and has items, otherwise fallback to first 3 images from collage
-    const displayImages = images && images.length > 0 ? images : [];
-
-    // Drop animation wrapper
-    const DropWrapper = ({ children, delay, className, zIndex = 1 }: { children: React.ReactNode; delay: number; className?: string; zIndex?: number }) => (
+const DropWrapper = memo(function DropWrapper({ children, delay, className, zIndex = 1 }: DropWrapperProps) {
+    return (
         <motion.div
             initial={{ y: -200, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -48,6 +42,22 @@ export default function LetterScreen({ name1, name2, images, message }: LetterSc
             </div>
         </motion.div>
     );
+});
+
+export default function LetterScreen({ name1, name2, images, message }: LetterScreenProps) {
+    const defaultMessage = {
+        greeting: "Dear em iu ,",
+        content: `Sau một thời gian tìm hiểu, bộ phận thẩm định tình cảm đã quyết định gia hạn hợp đồng yêu đương với bạn thêm... trọn đời. Dù bạn thi thoảng hay dỗi, hay ăn tranh phần của mình, nhưng vì bạn quá đáng yêu nên mình đành 'chịu đựng' vậy.`
+    };
+
+    // Use message if it has content, otherwise use default
+    const displayMessage = {
+        greeting: message?.greeting || defaultMessage.greeting,
+        content: message?.content || defaultMessage.content
+    };
+
+    // Use letterImages if provided and has items, otherwise fallback to first 3 images from collage
+    const displayImages = images && images.length > 0 ? images : [];
 
     return (
         <div className={styles.letterContainer}>

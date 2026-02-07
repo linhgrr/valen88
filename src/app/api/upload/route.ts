@@ -1,11 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
-const IMGBB_API_KEY = process.env.IMGBB_API_KEY;
+const s3Client = new S3Client({
+  endpoint: process.env.S3_ENDPOINT,
+  region: 'auto',
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY || '',
+    secretAccessKey: process.env.S3_SECRET_KEY || '',
+  },
+  forcePathStyle: true, // Required for S3-compatible APIs
+});
+
+const S3_BUCKET = process.env.S3_BUCKET || 'valentine-images';
 
 export async function POST(request: NextRequest) {
   try {
-    if (!IMGBB_API_KEY) {
-      return NextResponse.json({ error: 'ImgBB API key not configured' }, { status: 500 });
+    if (!process.env.S3_ACCESS_KEY || !process.env.S3_SECRET_KEY || !process.env.S3_ENDPOINT) {
+      return NextResponse.json({ error: 'S3 credentials not configured' }, { status: 500 });
     }
 
     const formData = await request.formData();
@@ -15,31 +26,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No image provided' }, { status: 400 });
     }
 
-    // Convert file to base64
+    // Generate unique filename
+    const timestamp = Date.now();
+    const randomString = Math.random().toString(36).substring(2, 8);
+    const extension = image.name.split('.').pop() || 'jpg';
+    const filename = `${timestamp}-${randomString}.${extension}`;
+
+    // Convert file to buffer
     const bytes = await image.arrayBuffer();
-    const base64 = Buffer.from(bytes).toString('base64');
+    const buffer = Buffer.from(bytes);
 
-    // Upload to imgbb
-    const imgbbFormData = new FormData();
-    imgbbFormData.append('key', IMGBB_API_KEY);
-    imgbbFormData.append('image', base64);
-
-    const response = await fetch('https://api.imgbb.com/1/upload', {
-      method: 'POST',
-      body: imgbbFormData,
+    // Upload to S3
+    const command = new PutObjectCommand({
+      Bucket: S3_BUCKET,
+      Key: filename,
+      Body: buffer,
+      ContentType: image.type,
+      ACL: 'public-read',
     });
 
-    const data = await response.json();
+    await s3Client.send(command);
 
-    if (!data.success) {
-      return NextResponse.json({ error: 'Failed to upload image' }, { status: 500 });
-    }
+    // Generate public URL (path-style)
+    const endpoint = process.env.S3_ENDPOINT!.replace(/\/$/, '');
+    const url = `${endpoint}/${S3_BUCKET}/${filename}`;
 
     return NextResponse.json({
       success: true,
-      url: data.data.url,
-      display_url: data.data.display_url,
-      delete_url: data.data.delete_url,
+      url: url,
+      display_url: url,
     });
   } catch (error) {
     console.error('Upload error:', error);
