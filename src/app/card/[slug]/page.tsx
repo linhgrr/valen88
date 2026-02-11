@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import styles from "../../page.module.css";
@@ -26,8 +27,9 @@ interface CardData {
 const MOBILE_MAX_WIDTH = 480;
 const MIN_LOADING_TIME = 2000;
 
-export default function CardPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params);
+export default function CardPage() {
+  const pathname = usePathname();
+  const slug = pathname.split('/').pop() || '';
   const [screenState, setScreenState] = useState<'loading' | 'main' | 'collage' | 'letter'>('loading');
   const [isHeartTransition, setIsHeartTransition] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
