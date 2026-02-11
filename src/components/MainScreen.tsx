@@ -111,7 +111,7 @@ export default function MainScreen({ name1, name2, onGoCollage }: MainScreenProp
                 <motion.div
                     className={styles.letterCard}
                     initial={{ y: 15, opacity: 1 }}
-                    animate={{ y: isLetterRevealed ? -120 : 15, opacity: 1 }}
+                    animate={{ y: isLetterRevealed ? -140 : 15, opacity: 1 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
                 >
                     <p className={styles.letterDate}>14/02/2026</p>

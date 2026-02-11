@@ -1,11 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Dancing_Script } from "next/font/google";
+import { Dancing_Script, Playfair_Display } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
 const dancingScript = Dancing_Script({
   subsets: ["latin", "vietnamese"],
   variable: "--font-dancing-script",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-playfair",
   display: "swap",
 });
 
@@ -43,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${dancingScript.variable} ${sloop.variable}`}>
+    <html lang="vi" className={`${dancingScript.variable} ${sloop.variable} ${playfair.variable}`}>
       <head>
         {/* We can keep the link for other fonts or replace them all with next/font/google */}
         <link

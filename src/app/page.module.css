@@ -139,7 +139,7 @@
 }
 
 .coupleNames {
-  font-family: 'Unna', serif;
+  font-family: var(--font-playfair), 'Unna', serif;
   font-style: italic;
   font-size: 16px;
   margin: 0;
@@ -191,7 +191,7 @@
   position: absolute;
   background: #fdf1e9;
   color: #891008;
-  font-family: 'Unna', serif;
+  font-family: var(--font-playfair), 'Unna', serif;
   font-weight: 700;
   font-size: 24px;
   padding: 10px 18px;
