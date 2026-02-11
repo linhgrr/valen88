@@ -9,10 +9,10 @@ import LoadingScreen from "../components/LoadingScreen";
 import MainScreen from "../components/MainScreen";
 import CollageScreen from "../components/CollageScreen";
 import DesktopWarning from "../components/DesktopWarning";
-import { preloadStaticAssets } from "../utils/preloadAssets";
+import { preloadCriticalAssets, preloadRemainingAssetsInBackground } from "../utils/preloadAssets";
 
 const MOBILE_MAX_WIDTH = 480;
-const MIN_LOADING_TIME = 2000; // Minimum loading time in ms
+const MIN_LOADING_TIME = 600; // Keep a short loading animation, but don't block too long
 
 function PageContent() {
   const searchParams = useSearchParams();
@@ -40,21 +40,37 @@ function PageContent() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Preload all assets during loading screen
+  // Block on only first-screen assets, then preload the rest in background
   useEffect(() => {
     if (!isMobile) return;
 
+    let isCancelled = false;
+    let loadingTimer: number | undefined;
     const startTime = Date.now();
 
-    preloadStaticAssets().then(() => {
-      const elapsed = Date.now() - startTime;
-      const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsed);
+    void preloadCriticalAssets()
+      .catch(() => {
+        // Continue UI flow even if preload has partial failures.
+      })
+      .finally(() => {
+        if (isCancelled) return;
 
-      // Ensure minimum loading time for smooth UX
-      setTimeout(() => {
-        setAssetsLoaded(true);
-      }, remainingTime);
-    });
+        const elapsed = Date.now() - startTime;
+        const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsed);
+
+        loadingTimer = window.setTimeout(() => {
+          if (!isCancelled) {
+            setAssetsLoaded(true);
+          }
+        }, remainingTime);
+
+        preloadRemainingAssetsInBackground();
+      });
+
+    return () => {
+      isCancelled = true;
+      if (loadingTimer) window.clearTimeout(loadingTimer);
+    };
   }, [isMobile]);
 
   // Transition to main screen when assets are loaded

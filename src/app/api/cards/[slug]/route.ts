@@ -49,15 +49,27 @@ export async function PUT(
       params,
       request.json()
     ]);
-    const { name1, name2 } = body;
+    const { name1, name2, images, letterImages, letterMessage } = body;
 
     if (!name1 || !name2) {
       return NextResponse.json({ error: 'Both names are required' }, { status: 400 });
     }
 
+    // Build update object with only provided fields
+    const updateData: Record<string, unknown> = { name1, name2 };
+    if (images && images.length === 6) {
+      updateData.images = images;
+    }
+    if (letterImages !== undefined) {
+      updateData.letterImages = letterImages;
+    }
+    if (letterMessage !== undefined) {
+      updateData.letterMessage = letterMessage;
+    }
+
     const card = await Card.findOneAndUpdate(
       { slug },
-      { name1, name2 },
+      updateData,
       { new: true }
     );
 
@@ -73,6 +85,8 @@ export async function PUT(
         name1: card.name1,
         name2: card.name2,
         images: card.images,
+        letterImages: card.letterImages,
+        letterMessage: card.letterMessage,
         createdAt: card.createdAt,
       },
     });

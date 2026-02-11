@@ -173,7 +173,9 @@
 
 .qrBtn,
 .copyBtn,
-.viewBtn {
+.viewBtn,
+.editBtn,
+.deleteBtn {
   padding: 10px 16px;
   border: none;
   border-radius: 10px;
@@ -199,9 +201,21 @@
   color: #891008;
 }
 
+.editBtn {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.deleteBtn {
+  background: #f8d7da;
+  color: #721c24;
+}
+
 .qrBtn:hover,
 .copyBtn:hover,
-.viewBtn:hover {
+.viewBtn:hover,
+.editBtn:hover,
+.deleteBtn:hover {
   transform: scale(1.05);
 }
 

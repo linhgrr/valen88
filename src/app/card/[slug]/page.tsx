@@ -10,7 +10,7 @@ import MainScreen from "../../../components/MainScreen";
 import CollageScreen from "../../../components/CollageScreen";
 import LetterScreen from "../../../components/LetterScreen";
 import DesktopWarning from "../../../components/DesktopWarning";
-import { preloadAllAssets } from "../../../utils/preloadAssets";
+import { preloadCriticalAssets, preloadRemainingAssetsInBackground } from "../../../utils/preloadAssets";
 
 interface CardData {
   name1: string;
@@ -25,7 +25,7 @@ interface CardData {
 }
 
 const MOBILE_MAX_WIDTH = 480;
-const MIN_LOADING_TIME = 2000;
+const MIN_LOADING_TIME = 600;
 
 export default function CardPage() {
   const pathname = usePathname();
@@ -54,9 +54,11 @@ export default function CardPage() {
 
   // Fetch card data
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchCard = async () => {
       try {
-        const response = await fetch(`/api/cards/${slug}`);
+        const response = await fetch(`/api/cards/${slug}`, { signal: controller.signal });
         const data = await response.json();
 
         if (data.success) {
@@ -65,28 +67,52 @@ export default function CardPage() {
           setError('Không tìm thấy thiệp');
         }
       } catch (err) {
+        if ((err as Error).name === 'AbortError') return;
         setError('Có lỗi xảy ra khi tải thiệp');
       }
     };
 
-    fetchCard();
+    void fetchCard();
+
+    return () => controller.abort();
   }, [slug]);
 
-  // Preload all assets (static + card images) when card data is available
+  // Only block on first-screen assets, so main screen appears fast
   useEffect(() => {
     if (!isMobile || !cardData) return;
 
+    let isCancelled = false;
+    let loadingTimer: number | undefined;
     const startTime = Date.now();
 
-    // Preload static assets + card images from API
-    preloadAllAssets([...cardData.images, ...(cardData.letterImages || [])]).then(() => {
-      const elapsed = Date.now() - startTime;
-      const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsed);
+    void preloadCriticalAssets()
+      .catch(() => {
+        // Continue UI flow even if preload has partial failures.
+      })
+      .finally(() => {
+        if (isCancelled) return;
 
-      setTimeout(() => {
-        setAssetsLoaded(true);
-      }, remainingTime);
-    });
+        const elapsed = Date.now() - startTime;
+        const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsed);
+
+        loadingTimer = window.setTimeout(() => {
+          if (!isCancelled) {
+            setAssetsLoaded(true);
+          }
+        }, remainingTime);
+      });
+
+    return () => {
+      isCancelled = true;
+      if (loadingTimer) window.clearTimeout(loadingTimer);
+    };
+  }, [isMobile, cardData]);
+
+  // Preload collage + remote card images in background (non-blocking)
+  useEffect(() => {
+    if (!isMobile || !cardData) return;
+
+    preloadRemainingAssetsInBackground([...cardData.images, ...(cardData.letterImages || [])]);
   }, [isMobile, cardData]);
 
   // Transition to main screen when assets are loaded

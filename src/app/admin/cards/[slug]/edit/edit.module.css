@@ -1,0 +1,317 @@
+/* Edit Card Page - reuses design language from create page */
+.container {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: linear-gradient(135deg, #ffe3e6 0%, #ffb6c1 50%, #ff9aa2 100%);
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.formCard {
+    background: white;
+    border-radius: 24px;
+    padding: 24px 16px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 8px 32px rgba(137, 16, 8, 0.1);
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 26px;
+    color: #891008;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.backLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #891008;
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 16px;
+    font-family: sans-serif;
+    transition: opacity 0.3s;
+}
+
+.backLink:hover {
+    opacity: 0.7;
+}
+
+.error {
+    background: #ffe0e0;
+    color: #891008;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.success {
+    background: #e0ffe0;
+    color: #2E7D32;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Names Section */
+.namesSection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.nameField {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nameField label {
+    color: #891008;
+    font-size: 14px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.nameField input {
+    padding: 14px;
+    border: 2px solid #ffb6c1;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.nameField input:focus {
+    outline: none;
+    border-color: #891008;
+}
+
+.heartDivider {
+    display: flex;
+    justify-content: center;
+    color: #ff6b8a;
+    font-size: 24px;
+    padding: 4px 0;
+}
+
+/* Images Section */
+.imagesSection {
+    margin-bottom: 24px;
+}
+
+.imagesSection h2 {
+    text-align: center;
+    color: #891008;
+    font-size: 18px;
+    margin-bottom: 16px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.imageGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.imageItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.imageLabel {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+}
+
+.imageBox {
+    position: relative;
+    aspect-ratio: 1;
+    border: 2px dashed #ffb6c1;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #fff8f9;
+    transition: all 0.3s;
+}
+
+.imageBox:hover {
+    border-color: #891008;
+}
+
+.imagePlaceholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #b5495b;
+    gap: 4px;
+}
+
+.imagePlaceholder svg {
+    font-size: 24px;
+}
+
+.imagePlaceholder span {
+    font-size: 11px;
+}
+
+/* Message Section */
+.messageSection {
+    margin-bottom: 24px;
+}
+
+.messageSection h2 {
+    text-align: center;
+    color: #891008;
+    font-size: 18px;
+    margin-bottom: 16px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.messageField {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.messageField label {
+    color: #891008;
+    font-size: 14px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.messageField input,
+.messageField textarea {
+    padding: 14px;
+    border: 2px solid #ffb6c1;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.messageField input:focus,
+.messageField textarea:focus {
+    outline: none;
+    border-color: #891008;
+}
+
+/* Save Button */
+.saveBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #ff6b8a, #891008);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 20px;
+    font-family: 'Dancing Script', cursive;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.saveBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(137, 16, 8, 0.3);
+}
+
+.saveBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Loading */
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
+}
+
+.spinIcon {
+    font-size: 48px;
+    color: #891008;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loadingText {
+    color: #891008;
+    font-size: 20px;
+    font-family: 'Dancing Script', cursive;
+}
+
+/* Tablet and up */
+@media (min-width: 480px) {
+    .container {
+        padding: 24px;
+    }
+
+    .formCard {
+        padding: 32px 24px;
+    }
+
+    .namesSection {
+        flex-direction: row;
+        align-items: flex-end;
+    }
+
+    .nameField {
+        flex: 1;
+    }
+
+    .heartDivider {
+        padding-bottom: 14px;
+    }
+
+    .imageGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .formCard {
+        max-width: 600px;
+        padding: 40px 32px;
+    }
+
+    .title {
+        font-size: 32px;
+    }
+}

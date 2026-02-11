@@ -166,6 +166,9 @@ export default function CardsPage() {
                 >
                   👁️ Xem
                 </a>
+                <Link href={`/admin/cards/${card.slug}/edit`} className={styles.editBtn}>
+                  ✏️ Sửa
+                </Link>
               </div>
             </div>
           ))}
