@@ -135,7 +135,7 @@ function PageContent() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<LoadingScreen />}>
+    <Suspense fallback={null}>
       <PageContent />
     </Suspense>
   );

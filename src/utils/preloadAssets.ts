@@ -27,10 +27,6 @@ export const STATIC_ASSETS = [
   '/icon03.png',
   '/icon04.png',
   '/icon05.png',
-  '/icon11.png',
-  '/icon12.png',
-  '/icon13.png',
-  '/icon15.png',
   '/icon16.png',
 ];
 

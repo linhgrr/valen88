@@ -77,7 +77,7 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
     const startTime = Date.now();
 
     // Preload static assets + card images from API
-    preloadAllAssets(cardData.images).then(() => {
+    preloadAllAssets([...cardData.images, ...(cardData.letterImages || [])]).then(() => {
       const elapsed = Date.now() - startTime;
       const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsed);
 
@@ -141,18 +141,12 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
     );
   }
 
-  if (!cardData) {
-    return (
-      <main className={styles.container}>
-        <LoadingScreen />
-      </main>
-    );
-  }
+  // cardData loading is handled inside AnimatePresence below
 
   return (
     <main className={styles.container}>
       <AnimatePresence mode="wait">
-        {screenState === 'loading' && (
+        {(screenState === 'loading' || !cardData) && (
           <motion.div
             key="loading"
             initial={{ opacity: 1 }}
@@ -163,7 +157,7 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
             <LoadingScreen />
           </motion.div>
         )}
-        {screenState === 'main' && (
+        {screenState === 'main' && cardData && (
           <motion.div
             key="main"
             initial={{ opacity: 0 }}
@@ -178,7 +172,7 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
             />
           </motion.div>
         )}
-        {screenState === 'collage' && (
+        {screenState === 'collage' && cardData && (
           <motion.div
             key="collage"
             initial={{ opacity: 0 }}
@@ -195,7 +189,7 @@ export default function CardPage({ params }: { params: Promise<{ slug: string }>
             />
           </motion.div>
         )}
-        {screenState === 'letter' && (
+        {screenState === 'letter' && cardData && (
           <motion.div
             key="letter"
             initial={{ opacity: 0 }}
