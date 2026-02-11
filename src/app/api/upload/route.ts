@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
+// Increase the body size limit to handle larger image uploads (default is 4.5MB on Vercel)
+export const runtime = 'nodejs';
+export const maxDuration = 30; // seconds
+
 const s3Client = new S3Client({
   endpoint: process.env.S3_ENDPOINT,
   region: 'auto',

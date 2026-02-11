@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import QRCode from "qrcode";
 import styles from "./admin.module.css";
+import { compressImage } from "../../utils/imageCompression";
 
 interface UploadedImage {
   file: File | null;
@@ -24,7 +25,7 @@ const IMAGE_LABELS = [
   "Ảnh khung 1 (trên trái)",
   "Ảnh khung 2 (trên phải)",
   "Ảnh trái tim trái",
-  "Ảnh trái tim phải", 
+  "Ảnh trái tim phải",
   "Ảnh khung 3 (dưới trái)",
   "Ảnh khung 4 (dưới phải)",
 ];
@@ -52,8 +53,11 @@ export default function AdminPage() {
   };
 
   const uploadImage = async (file: File): Promise<string> => {
+    // Compress image to stay under Vercel's 4.5MB body size limit
+    const compressed = await compressImage(file);
+
     const formData = new FormData();
-    formData.append("image", file);
+    formData.append("image", compressed);
 
     const response = await fetch("/api/upload", {
       method: "POST",
@@ -94,7 +98,7 @@ export default function AdminPage() {
         } else if (images[i].file) {
           const url = await uploadImage(images[i].file!);
           uploadedUrls.push(url);
-          
+
           // Update state with uploaded URL
           const newImages = [...images];
           newImages[i] = { ...newImages[i], url };
@@ -165,16 +169,16 @@ export default function AdminPage() {
       <div className={styles.container}>
         <div className={styles.successCard}>
           <h1 className={styles.title}>🎉 Thiệp đã được tạo!</h1>
-          
+
           <div className={styles.cardInfo}>
             <p><strong>{createdCard.name1}</strong> ❤️ <strong>{createdCard.name2}</strong></p>
           </div>
 
           <div className={styles.qrSection}>
-            <Image 
-              src={createdCard.qrCode} 
-              alt="QR Code" 
-              width={250} 
+            <Image
+              src={createdCard.qrCode}
+              alt="QR Code"
+              width={250}
               height={250}
               className={styles.qrCode}
             />
@@ -182,13 +186,13 @@ export default function AdminPage() {
           </div>
 
           <div className={styles.linkSection}>
-            <input 
-              type="text" 
-              value={createdCard.link} 
-              readOnly 
+            <input
+              type="text"
+              value={createdCard.link}
+              readOnly
               className={styles.linkInput}
             />
-            <button 
+            <button
               onClick={() => copyToClipboard(createdCard.link)}
               className={styles.copyBtn}
             >
@@ -197,9 +201,9 @@ export default function AdminPage() {
           </div>
 
           <div className={styles.actions}>
-            <a 
-              href={createdCard.link} 
-              target="_blank" 
+            <a
+              href={createdCard.link}
+              target="_blank"
               rel="noopener noreferrer"
               className={styles.previewBtn}
             >
@@ -301,8 +305,8 @@ export default function AdminPage() {
           {isUploading
             ? "⏳ Đang upload ảnh..."
             : isCreating
-            ? "⏳ Đang tạo thiệp..."
-            : "💝 Tạo Thiệp"}
+              ? "⏳ Đang tạo thiệp..."
+              : "💝 Tạo Thiệp"}
         </button>
       </div>
     </div>

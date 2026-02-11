@@ -30,14 +30,26 @@ export const STATIC_ASSETS = [
   '/icon16.png',
 ];
 
+const PER_IMAGE_TIMEOUT = 5000; // 5 seconds per image
+const GLOBAL_TIMEOUT = 10000; // 10 seconds max for all preloading
+
 /**
- * Preload a single image
+ * Preload a single image with a timeout
  */
 export function preloadImage(src: string): Promise<void> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const img = new window.Image();
-    img.onload = () => resolve();
+    const timer = setTimeout(() => {
+      console.warn(`Preload timed out: ${src}`);
+      resolve();
+    }, PER_IMAGE_TIMEOUT);
+
+    img.onload = () => {
+      clearTimeout(timer);
+      resolve();
+    };
     img.onerror = () => {
+      clearTimeout(timer);
       console.warn(`Failed to preload image: ${src}`);
       resolve(); // Don't reject, just continue
     };
@@ -46,10 +58,18 @@ export function preloadImage(src: string): Promise<void> {
 }
 
 /**
- * Preload multiple images in parallel
+ * Preload multiple images in parallel with a global timeout
  */
 export async function preloadImages(sources: string[]): Promise<void> {
-  await Promise.all(sources.map(preloadImage));
+  await Promise.race([
+    Promise.all(sources.map(preloadImage)),
+    new Promise<void>((resolve) => {
+      setTimeout(() => {
+        console.warn('Global preload timeout reached, proceeding anyway');
+        resolve();
+      }, GLOBAL_TIMEOUT);
+    }),
+  ]);
 }
 
 /**
@@ -63,6 +83,6 @@ export async function preloadStaticAssets(): Promise<void> {
  * Preload static assets + dynamic images (e.g., from API)
  */
 export async function preloadAllAssets(dynamicImages: string[] = []): Promise<void> {
-  const allImages = [...STATIC_ASSETS, ...dynamicImages];
+  const allImages = [...STATIC_ASSETS, ...dynamicImages.filter(Boolean)];
   await preloadImages(allImages);
 }
